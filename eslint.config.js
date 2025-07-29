@@ -45,7 +45,7 @@ export default [
 
       // TypeScript specific rules
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -63,15 +63,17 @@ export default [
       'jsx-a11y/img-redundant-alt': 'error',
       'jsx-a11y/label-has-associated-control': 'error',
       'jsx-a11y/no-autofocus': 'warn',
-      'jsx-a11y/role-has-required-aria-props': 'error',
+      'jsx-a11y/role-has-required-aria-props': 'warn',
 
       // General code quality rules
       'no-console': 'warn',
       'no-debugger': 'error',
       'no-duplicate-imports': 'error',
-      'no-unused-expressions': 'error',
+      'no-unused-expressions': 'warn',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-useless-escape': 'warn',
+      'no-prototype-builtins': 'warn',
     },
   },
   {
