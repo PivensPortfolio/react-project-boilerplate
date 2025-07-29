@@ -1,0 +1,31 @@
+{
+  "name": "Build Checker",
+  "description": "Check TypeScript compilation and build process before commits",
+  "trigger": {
+    "type": "manual",
+    "buttonText": "Check Build"
+  },
+  "actions": [
+    {
+      "type": "command",
+      "command": "npm run type-check",
+      "description": "Check TypeScript compilation"
+    },
+    {
+      "type": "command",
+      "command": "npm run build",
+      "description": "Build the project"
+    },
+    {
+      "type": "command",
+      "command": "npm run lint",
+      "description": "Run ESLint checks"
+    }
+  ],
+  "settings": {
+    "enabled": true,
+    "showOutput": true,
+    "runInBackground": false,
+    "stopOnError": true
+  }
+}

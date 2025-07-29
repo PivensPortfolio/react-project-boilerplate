@@ -1,0 +1,11 @@
+{
+  "projectName": "my-awesome-app",
+  "description": "An awesome React application with modern tools",
+  "author": "John Doe",
+  "email": "john.doe@example.com",
+  "outputName": "my-awesome-app-v1.0",
+  "customVariables": {
+    "{{COMPANY_NAME}}": "Awesome Corp",
+    "{{PROJECT_VERSION}}": "1.0.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "role": "user"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "title": "Welcome to React Boilerplate",
+      "content": "This is a sample post from the mock API",
+      "authorId": "1",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "2",
+      "title": "Getting Started",
+      "content": "Learn how to use this boilerplate effectively",
+      "authorId": "2",
+      "createdAt": "2024-01-02T00:00:00Z"
+    }
+  ]
+}

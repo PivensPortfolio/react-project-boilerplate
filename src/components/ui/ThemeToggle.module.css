@@ -1,0 +1,174 @@
+/* Theme Toggle Component Styles */
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.toggle {
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Size variants */
+.small {
+  width: 2.5rem;
+  height: 1.25rem;
+}
+
+.medium {
+  width: 3rem;
+  height: 1.5rem;
+}
+
+.large {
+  width: 3.5rem;
+  height: 1.75rem;
+}
+
+/* Track (background) */
+.track {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.light .track {
+  background-color: var(--color-gray-300);
+}
+
+.dark .track {
+  background-color: var(--color-primary);
+}
+
+/* Thumb (sliding circle) */
+.thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-radius: var(--radius-full);
+  background-color: var(--color-background);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.small .thumb {
+  width: 1rem;
+  height: 1rem;
+}
+
+.medium .thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.large .thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Thumb positioning */
+.light .thumb {
+  transform: translateX(0);
+}
+
+.dark .thumb {
+  transform: translateX(100%);
+}
+
+.small.dark .thumb {
+  transform: translateX(1.25rem);
+}
+
+.medium.dark .thumb {
+  transform: translateX(1.5rem);
+}
+
+.large.dark .thumb {
+  transform: translateX(1.75rem);
+}
+
+/* Icon */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--color-text-muted);
+  transition: color var(--transition-normal);
+}
+
+.light .icon {
+  color: var(--color-warning);
+}
+
+.dark .icon {
+  color: var(--color-primary);
+}
+
+/* Hover effects */
+.toggle:hover:not(:disabled) .track {
+  opacity: 0.8;
+}
+
+.toggle:hover:not(:disabled) .thumb {
+  box-shadow: var(--shadow-md);
+}
+
+/* Active state */
+.toggle:active:not(:disabled) .thumb {
+  transform: scale(0.95);
+}
+
+.small.dark.toggle:active:not(:disabled) .thumb {
+  transform: translateX(1.25rem) scale(0.95);
+}
+
+.medium.dark.toggle:active:not(:disabled) .thumb {
+  transform: translateX(1.5rem) scale(0.95);
+}
+
+.large.dark.toggle:active:not(:disabled) .thumb {
+  transform: translateX(1.75rem) scale(0.95);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .track,
+  .thumb,
+  .icon {
+    transition: none;
+  }
+}

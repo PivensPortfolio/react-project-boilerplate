@@ -1,0 +1,41 @@
+# Multi-stage build for creating a template image
+FROM node:18-alpine as template
+
+WORKDIR /template
+
+# Copy the boilerplate files
+COPY . .
+
+# Remove development artifacts
+RUN rm -rf node_modules dist .git
+
+# Create the final template image
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy template files
+COPY --from=template /template /template
+
+# Create a script to initialize new projects
+RUN echo '#!/bin/sh\n\
+if [ -z "$1" ]; then\n\
+  echo "Usage: docker run --rm -v $(pwd):/output react-boilerplate <project-name>"\n\
+  exit 1\n\
+fi\n\
+\n\
+PROJECT_NAME=$1\n\
+cp -r /template /output/$PROJECT_NAME\n\
+cd /output/$PROJECT_NAME\n\
+\n\
+# Replace template variables\n\
+sed -i "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" package.json README.md index.html\n\
+\n\
+echo "Project $PROJECT_NAME created successfully!"\n\
+echo "Next steps:"\n\
+echo "  cd $PROJECT_NAME"\n\
+echo "  npm install"\n\
+echo "  npm run dev"\n\
+' > /usr/local/bin/create-project && chmod +x /usr/local/bin/create-project
+
+ENTRYPOINT ["/usr/local/bin/create-project"]

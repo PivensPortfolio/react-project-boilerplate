@@ -1,0 +1,223 @@
+.errorExample {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.errorExample h2 {
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.errorExample p {
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.errorReports {
+  border-top: 1px solid var(--color-border);
+  padding-top: 2rem;
+}
+
+.reportActions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.reportsList {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.reportsList h3 {
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.reportItem {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.reportItem:last-child {
+  margin-bottom: 0;
+}
+
+.reportHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.reportType,
+.reportSeverity {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.reportType.api {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.reportType.runtime {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.reportType.network {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.reportType.validation {
+  background-color: #e8f5e8;
+  color: #388e3c;
+}
+
+.reportSeverity.low {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.reportSeverity.medium {
+  background-color: #fff8e1;
+  color: #f57c00;
+}
+
+.reportSeverity.high {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.reportSeverity.critical {
+  background-color: #ffebee;
+  color: #b71c1c;
+  font-weight: 700;
+}
+
+.reportTime {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin-left: auto;
+}
+
+.reportMessage {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.reportContext {
+  margin-top: 0.5rem;
+}
+
+.reportContext summary {
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.reportContext summary:hover {
+  color: var(--color-primary);
+}
+
+.reportContext pre {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .reportType.api {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+  }
+
+  .reportType.runtime {
+    background-color: #92400e;
+    color: #fbbf24;
+  }
+
+  .reportType.network {
+    background-color: #7c2d12;
+    color: #f3e8ff;
+  }
+
+  .reportType.validation {
+    background-color: #166534;
+    color: #86efac;
+  }
+
+  .reportSeverity.low {
+    background-color: #166534;
+    color: #86efac;
+  }
+
+  .reportSeverity.medium {
+    background-color: #92400e;
+    color: #fbbf24;
+  }
+
+  .reportSeverity.high {
+    background-color: #991b1b;
+    color: #fca5a5;
+  }
+
+  .reportSeverity.critical {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .errorExample {
+    padding: 1rem;
+  }
+
+  .buttonGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reportActions {
+    flex-direction: column;
+  }
+
+  .reportHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .reportTime {
+    margin-left: 0;
+  }
+}

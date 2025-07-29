@@ -1,0 +1,101 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+.App main {
+  flex: 1;
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.App h1 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.App h2 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.App h3 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+}
+
+.App p {
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-lg);
+}
+
+.App ul {
+  text-align: left;
+  max-width: 600px;
+  margin: var(--spacing-lg) auto;
+}
+
+.App li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-light);
+  line-height: var(--line-height-normal);
+}
+
+.App a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-normal);
+}
+
+.App a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Responsive typography */
+@media (max-width: 767px) {
+  .App main {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .App h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .App h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .App h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .App ul {
+    max-width: 100%;
+    margin: var(--spacing-md) 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .App main {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .App h1 {
+    font-size: var(--font-size-xl);
+  }
+}

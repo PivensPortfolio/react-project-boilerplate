@@ -1,0 +1,28 @@
+{
+  "name": "Test Runner",
+  "description": "Automatically run tests when TypeScript or test files are saved",
+  "trigger": {
+    "type": "file_save",
+    "patterns": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx"
+    ]
+  },
+  "actions": [
+    {
+      "type": "command",
+      "command": "npm run test -- --run --reporter=verbose",
+      "description": "Run test suite with verbose output"
+    }
+  ],
+  "settings": {
+    "enabled": true,
+    "debounce": 1000,
+    "showOutput": true,
+    "runInBackground": false
+  }
+}

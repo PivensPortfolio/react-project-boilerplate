@@ -1,0 +1,30 @@
+{
+  "name": "Dependency Updater",
+  "description": "Check for outdated packages and security vulnerabilities",
+  "trigger": {
+    "type": "manual",
+    "buttonText": "Check Dependencies"
+  },
+  "actions": [
+    {
+      "type": "command",
+      "command": "npm outdated",
+      "description": "Check for outdated packages"
+    },
+    {
+      "type": "command",
+      "command": "npm audit",
+      "description": "Check for security vulnerabilities"
+    },
+    {
+      "type": "ai_prompt",
+      "prompt": "Review the npm outdated and audit results. Suggest which packages should be updated and provide update commands. Consider breaking changes and compatibility.",
+      "description": "AI analysis of dependency updates"
+    }
+  ],
+  "settings": {
+    "enabled": true,
+    "showOutput": true,
+    "runInBackground": false
+  }
+}

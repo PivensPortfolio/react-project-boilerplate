@@ -1,0 +1,36 @@
+{
+  "name": "Code Formatter",
+  "description": "Format code with Prettier and fix ESLint issues on save",
+  "trigger": {
+    "type": "file_save",
+    "patterns": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.css",
+      "**/*.json"
+    ]
+  },
+  "actions": [
+    {
+      "type": "command",
+      "command": "npx prettier --write ${file}",
+      "description": "Format file with Prettier"
+    },
+    {
+      "type": "command",
+      "command": "npx eslint ${file} --fix",
+      "description": "Fix ESLint issues",
+      "condition": {
+        "fileExtensions": [".ts", ".tsx", ".js", ".jsx"]
+      }
+    }
+  ],
+  "settings": {
+    "enabled": true,
+    "debounce": 500,
+    "showOutput": false,
+    "runInBackground": true
+  }
+}
