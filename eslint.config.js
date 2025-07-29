@@ -74,6 +74,7 @@ export default [
       'no-var': 'error',
       'no-useless-escape': 'warn',
       'no-prototype-builtins': 'warn',
+      'no-unused-vars': 'off', // Use @typescript-eslint/no-unused-vars instead
     },
   },
   {
