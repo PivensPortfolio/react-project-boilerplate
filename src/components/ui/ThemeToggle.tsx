@@ -39,7 +39,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-        aria-pressed={isDark}
+        aria-checked={isDark}
         role="switch"
       >
         <span className={styles.track}>

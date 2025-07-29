@@ -47,37 +47,37 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const [touched, setTouched] = useState(false);
 
     const validateValue = useCallback(
-      (value: string): string | null => {
+      (inputValue: string): string | null => {
         if (!validation) return null;
 
         // Required validation
-        if (validation.required && !value.trim()) {
+        if (validation.required && !inputValue.trim()) {
           return 'This field is required';
         }
 
         // Skip other validations if field is empty and not required
-        if (!value.trim() && !validation.required) {
+        if (!inputValue.trim() && !validation.required) {
           return null;
         }
 
         // Min length validation
-        if (validation.minLength && value.length < validation.minLength) {
+        if (validation.minLength && inputValue.length < validation.minLength) {
           return `Minimum length is ${validation.minLength} characters`;
         }
 
         // Max length validation
-        if (validation.maxLength && value.length > validation.maxLength) {
+        if (validation.maxLength && inputValue.length > validation.maxLength) {
           return `Maximum length is ${validation.maxLength} characters`;
         }
 
         // Pattern validation
-        if (validation.pattern && !validation.pattern.test(value)) {
+        if (validation.pattern && !validation.pattern.test(inputValue)) {
           return 'Invalid format';
         }
 
         // Custom validation
         if (validation.custom) {
-          return validation.custom(value);
+          return validation.custom(inputValue);
         }
 
         return null;
