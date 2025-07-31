@@ -4,6 +4,8 @@
  */
 
 import { ApiError } from './types';
+import { useToastStore } from '../store/toastStore';
+import type { ToastType } from '../types/toast';
 
 export interface ErrorReport {
   id: string;
@@ -24,6 +26,7 @@ export interface ErrorHandlerOptions {
   reportToService?: boolean;
   severity?: ErrorReport['severity'];
   context?: Record<string, any>;
+  toastDuration?: number;
 }
 
 class ErrorService {
@@ -207,9 +210,10 @@ class ErrorService {
       this.logToConsole(errorReport);
     }
 
-    // Show toast notification if enabled
-    if (options.showToast) {
-      this.showErrorToast(errorReport);
+    // Show toast notification if enabled (default: true for user-facing errors)
+    const shouldShowToast = options.showToast !== false && this.shouldShowToastForError(errorReport);
+    if (shouldShowToast) {
+      this.showErrorToast(errorReport, options);
     }
 
     // Store locally for debugging
@@ -243,40 +247,21 @@ class ErrorService {
   }
 
   /**
-   * Show error toast notification
+   * Show error toast notification using toast system
    */
-  private showErrorToast(errorReport: ErrorReport): void {
-    // Create a simple toast notification
-    // In a real app, you might use a toast library like react-hot-toast
-    const toast = document.createElement('div');
-    toast.className = 'error-toast';
-    toast.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #f56565;
-      color: white;
-      padding: 12px 16px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      z-index: 10000;
-      max-width: 400px;
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 14px;
-      line-height: 1.4;
-    `;
-    
+  private showErrorToast(errorReport: ErrorReport, options: ErrorHandlerOptions = {}): void {
     const userFriendlyMessage = this.getUserFriendlyMessage(errorReport);
-    toast.textContent = userFriendlyMessage;
+    const toastType = this.getToastTypeFromError(errorReport);
+    const duration = options.toastDuration || this.getDefaultDurationForSeverity(errorReport.severity);
     
-    document.body.appendChild(toast);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      if (toast.parentNode) {
-        toast.parentNode.removeChild(toast);
-      }
-    }, 5000);
+    // Use the toast store to add a toast
+    const { addToast } = useToastStore.getState();
+    addToast({
+      message: userFriendlyMessage,
+      type: toastType,
+      duration,
+      dismissible: true,
+    });
   }
 
   /**
@@ -416,6 +401,110 @@ class ErrorService {
    */
   public clearStoredErrors(): void {
     localStorage.removeItem('error_reports');
+  }
+
+  /**
+   * Determine if toast should be shown for error type
+   */
+  private shouldShowToastForError(errorReport: ErrorReport): boolean {
+    // Don't show toasts for validation errors (they should be shown inline)
+    if (errorReport.type === 'validation') {
+      return false;
+    }
+    
+    // Don't show toasts for low severity runtime errors
+    if (errorReport.type === 'runtime' && errorReport.severity === 'low') {
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Get toast type based on error report
+   */
+  private getToastTypeFromError(errorReport: ErrorReport): ToastType {
+    switch (errorReport.severity) {
+      case 'critical':
+      case 'high':
+        return 'error';
+      case 'medium':
+        return errorReport.type === 'network' ? 'warning' : 'error';
+      case 'low':
+        return 'info';
+      default:
+        return 'error';
+    }
+  }
+
+  /**
+   * Get default toast duration based on error severity
+   */
+  private getDefaultDurationForSeverity(severity: ErrorReport['severity']): number {
+    switch (severity) {
+      case 'critical':
+        return 10000; // 10 seconds for critical errors
+      case 'high':
+        return 8000;  // 8 seconds for high severity
+      case 'medium':
+        return 6000;  // 6 seconds for medium severity
+      case 'low':
+        return 4000;  // 4 seconds for low severity
+      default:
+        return 6000;
+    }
+  }
+
+  /**
+   * Show success toast (convenience method)
+   */
+  public showSuccess(message: string, options: { duration?: number } = {}): void {
+    const { addToast } = useToastStore.getState();
+    addToast({
+      message,
+      type: 'success',
+      duration: options.duration || 4000,
+      dismissible: true,
+    });
+  }
+
+  /**
+   * Show info toast (convenience method)
+   */
+  public showInfo(message: string, options: { duration?: number } = {}): void {
+    const { addToast } = useToastStore.getState();
+    addToast({
+      message,
+      type: 'info',
+      duration: options.duration || 5000,
+      dismissible: true,
+    });
+  }
+
+  /**
+   * Show warning toast (convenience method)
+   */
+  public showWarning(message: string, options: { duration?: number } = {}): void {
+    const { addToast } = useToastStore.getState();
+    addToast({
+      message,
+      type: 'warning',
+      duration: options.duration || 6000,
+      dismissible: true,
+    });
+  }
+
+  /**
+   * Show error toast (convenience method)
+   */
+  public showError(message: string, options: { duration?: number } = {}): void {
+    const { addToast } = useToastStore.getState();
+    addToast({
+      message,
+      type: 'error',
+      duration: options.duration || 7000,
+      dismissible: true,
+    });
   }
 }
 

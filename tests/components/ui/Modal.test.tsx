@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Modal } from '@/components/ui/Modal';
+import styles from '@/components/ui/Modal.module.css';
 
 describe('Modal', () => {
   const defaultProps = {
@@ -11,14 +12,17 @@ describe('Modal', () => {
   };
 
   beforeEach(() => {
-    // Create a div to act as modal root
-    const modalRoot = document.createElement('div');
-    modalRoot.setAttribute('id', 'modal-root');
-    document.body.appendChild(modalRoot);
+    // Reset body styles and clear any existing content
+    document.body.style.overflow = '';
+    document.body.innerHTML = '';
   });
 
   afterEach(() => {
-    // Clean up
+    // Clean up React components first
+    cleanup();
+    // Reset body styles
+    document.body.style.overflow = '';
+    // Clear any remaining content
     document.body.innerHTML = '';
     vi.clearAllMocks();
   });
@@ -49,13 +53,13 @@ describe('Modal', () => {
 
   it('renders different sizes', () => {
     const { rerender } = render(<Modal {...defaultProps} size="small" />);
-    expect(screen.getByRole('dialog').firstChild).toHaveClass('small');
+    expect(screen.getByRole('dialog').firstChild).toHaveClass(styles.small);
 
     rerender(<Modal {...defaultProps} size="large" />);
-    expect(screen.getByRole('dialog').firstChild).toHaveClass('large');
+    expect(screen.getByRole('dialog').firstChild).toHaveClass(styles.large);
 
     rerender(<Modal {...defaultProps} size="fullscreen" />);
-    expect(screen.getByRole('dialog').firstChild).toHaveClass('fullscreen');
+    expect(screen.getByRole('dialog').firstChild).toHaveClass(styles.fullscreen);
   });
 
   it('renders with footer', () => {
@@ -140,7 +144,7 @@ describe('Modal', () => {
     render(<Modal {...defaultProps} noPadding />);
     
     const modalBody = screen.getByText('Modal content').parentElement;
-    expect(modalBody).toHaveClass('noPadding');
+    expect(modalBody).toHaveClass(styles.noPadding);
   });
 
   it('applies different footer alignments', () => {
@@ -150,11 +154,11 @@ describe('Modal', () => {
     );
     
     let footerElement = screen.getByRole('button', { name: 'Save' }).parentElement;
-    expect(footerElement).toHaveClass('centered');
+    expect(footerElement).toHaveClass(styles.centered);
 
     rerender(<Modal {...defaultProps} footer={footer} footerAlignment="space-between" />);
     footerElement = screen.getByRole('button', { name: 'Save' }).parentElement;
-    expect(footerElement).toHaveClass('spaceBetween');
+    expect(footerElement).toHaveClass(styles.spaceBetween);
   });
 
   it('applies custom className', () => {

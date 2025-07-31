@@ -20,10 +20,15 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky install",
     "package": "node scripts/package.js",
-    "package:custom": "node scripts/package.js --name my-react-app"
+    "package:custom": "node scripts/package.js --name my-react-app",
+    "analyze": "npm run build && node scripts/analyze-bundle.js",
+    "analyze:stats": "npm run build -- --mode analyze",
+    "optimize": "npm run build && node scripts/optimize-bundle.js",
+    "build:optimized": "npm run build && node scripts/optimize-bundle.js"
   },
   "dependencies": {
     "axios": "^1.6.2",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
@@ -36,6 +41,7 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.5.1",
+    "@types/jwt-decode": "^2.2.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",

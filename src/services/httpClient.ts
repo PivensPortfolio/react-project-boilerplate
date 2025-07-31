@@ -6,6 +6,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiError, RequestConfig } from './types';
 import { errorService } from './errorService';
+import { tokenManager } from '../utils/tokenManager';
 
 // Environment configuration
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
@@ -14,6 +15,11 @@ const DEFAULT_TIMEOUT = 10000;
 class HttpClient {
   private client: AxiosInstance;
   private authToken: string | null = null;
+  private isRefreshing = false;
+  private failedQueue: Array<{
+    resolve: (token: string) => void;
+    reject: (error: any) => void;
+  }> = [];
 
   constructor() {
     this.client = axios.create({
@@ -33,10 +39,23 @@ class HttpClient {
   private setupInterceptors(): void {
     // Request interceptor
     this.client.interceptors.request.use(
-      (config) => {
-        // Add auth token if available
-        if (this.authToken && !config.headers.skipAuth) {
-          config.headers.Authorization = `Bearer ${this.authToken}`;
+      async (config) => {
+        // Get current token from token manager
+        const currentToken = tokenManager.getAccessToken();
+        
+        // Check if token needs refresh before making request
+        if (currentToken && tokenManager.shouldRefreshToken() && !config.url?.includes('/auth/refresh')) {
+          try {
+            await this.handleTokenRefresh();
+          } catch (error) {
+            console.warn('Token refresh failed, proceeding with current token:', error);
+          }
+        }
+
+        // Add auth token if available and not explicitly skipped
+        const token = this.authToken || tokenManager.getAccessToken();
+        if (token && !config.headers.skipAuth) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
 
         // Add request timestamp for debugging
@@ -45,6 +64,7 @@ class HttpClient {
         console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`, {
           params: config.params,
           data: config.data,
+          hasAuth: !!config.headers.Authorization,
         });
 
         return config;
@@ -67,19 +87,35 @@ class HttpClient {
         return response;
       },
       async (error: AxiosError) => {
-        const duration = (error.config as any)?.metadata?.startTime 
-          ? Date.now() - (error.config as any).metadata.startTime 
+        const originalRequest = error.config as any;
+        const duration = originalRequest?.metadata?.startTime 
+          ? Date.now() - originalRequest.metadata.startTime 
           : 0;
 
-        console.error(`❌ ${error.config?.method?.toUpperCase()} ${error.config?.url} (${duration}ms)`, {
+        console.error(`❌ ${originalRequest?.method?.toUpperCase()} ${originalRequest?.url} (${duration}ms)`, {
           status: error.response?.status,
           message: error.message,
           data: error.response?.data,
         });
 
-        // Handle specific error cases
-        if (error.response?.status === 401) {
-          this.handleUnauthorized();
+        // Handle 401 errors with token refresh
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          if (originalRequest.url?.includes('/auth/refresh')) {
+            // Refresh token itself failed, force logout
+            this.handleUnauthorized();
+            return Promise.reject(error);
+          }
+
+          originalRequest._retry = true;
+
+          try {
+            const newToken = await this.handleTokenRefresh();
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return this.client(originalRequest);
+          } catch (refreshError) {
+            this.handleUnauthorized();
+            return Promise.reject(refreshError);
+          }
         }
 
         // Transform error to our standard format
@@ -90,14 +126,16 @@ class HttpClient {
           details: error.response?.data as Record<string, any>,
         };
 
-        // Report to error service
-        errorService.handleApiError(apiError, {
-          showToast: true,
-          context: {
-            url: error.config?.url,
-            method: error.config?.method,
-          },
-        });
+        // Report to error service (skip for auth refresh failures)
+        if (!originalRequest.url?.includes('/auth/refresh')) {
+          errorService.handleApiError(apiError, {
+            showToast: true,
+            context: {
+              url: error.config?.url,
+              method: error.config?.method,
+            },
+          });
+        }
 
         return Promise.reject(apiError);
       }
@@ -121,10 +159,68 @@ class HttpClient {
   }
 
   /**
+   * Handle token refresh with queue management
+   */
+  private async handleTokenRefresh(): Promise<string> {
+    if (this.isRefreshing) {
+      // If already refreshing, wait for the current refresh to complete
+      return new Promise((resolve, reject) => {
+        this.failedQueue.push({ resolve, reject });
+      });
+    }
+
+    this.isRefreshing = true;
+
+    try {
+      // Trigger token refresh event for auth service to handle
+      const refreshPromise = new Promise<string>((resolve, reject) => {
+        const handleRefresh = (event: CustomEvent) => {
+          window.removeEventListener('auth:token-refreshed', handleRefresh as EventListener);
+          const newToken = tokenManager.getAccessToken();
+          if (newToken) {
+            resolve(newToken);
+          } else {
+            reject(new Error('Token refresh failed'));
+          }
+        };
+
+        const handleLogout = () => {
+          window.removeEventListener('auth:logout', handleLogout);
+          window.removeEventListener('auth:token-refreshed', handleRefresh as EventListener);
+          reject(new Error('User logged out during refresh'));
+        };
+
+        window.addEventListener('auth:token-refreshed', handleRefresh as EventListener);
+        window.addEventListener('auth:logout', handleLogout);
+
+        // Trigger refresh
+        window.dispatchEvent(new CustomEvent('auth:token-refresh-needed'));
+      });
+
+      const newToken = await refreshPromise;
+      this.authToken = newToken;
+
+      // Process failed queue
+      this.failedQueue.forEach(({ resolve }) => resolve(newToken));
+      this.failedQueue = [];
+
+      return newToken;
+    } catch (error) {
+      // Process failed queue with error
+      this.failedQueue.forEach(({ reject }) => reject(error));
+      this.failedQueue = [];
+      throw error;
+    } finally {
+      this.isRefreshing = false;
+    }
+  }
+
+  /**
    * Handle unauthorized responses (401)
    */
   private handleUnauthorized(): void {
     this.clearAuthToken();
+    tokenManager.clearTokens();
     // Dispatch logout event or redirect to login
     window.dispatchEvent(new CustomEvent('auth:logout'));
   }
@@ -146,12 +242,15 @@ class HttpClient {
   }
 
   /**
-   * Initialize auth token from localStorage
+   * Initialize auth token from token manager
    */
   public initializeAuth(): void {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
+    const token = tokenManager.getAccessToken();
+    if (token && tokenManager.isTokenValid()) {
       this.authToken = token;
+    } else if (token) {
+      // Token exists but is invalid, clear it
+      tokenManager.clearTokens();
     }
   }
 

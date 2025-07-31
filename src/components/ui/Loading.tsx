@@ -11,7 +11,7 @@ export interface LoadingProps {
   className?: string;
 }
 
-export const Loading: React.FC<LoadingProps> = ({
+export const Loading: React.FC<LoadingProps> = React.memo(({
   size = 'medium',
   variant = 'spinner',
   color = 'primary',
@@ -20,23 +20,23 @@ export const Loading: React.FC<LoadingProps> = ({
   overlay = false,
   className = '',
 }) => {
-  const containerClasses = [
+  const containerClasses = React.useMemo(() => [
     styles.container,
     fullscreen && styles.fullscreen,
     overlay && styles.overlay,
     className,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [fullscreen, overlay, className]);
 
-  const textClasses = [
+  const textClasses = React.useMemo(() => [
     styles.text,
     styles[size],
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [size]);
 
-  const renderSpinner = () => {
+  const renderSpinner = React.useCallback(() => {
     const spinnerClasses = [
       styles.spinner,
       styles[size],
@@ -46,17 +46,17 @@ export const Loading: React.FC<LoadingProps> = ({
       .join(' ');
 
     return <div className={spinnerClasses} aria-label="Loading" />;
-  };
+  }, [size, color]);
 
-  const renderDots = () => (
+  const renderDots = React.useCallback(() => (
     <div className={styles.dots} aria-label="Loading">
       <div className={`${styles.dot} ${styles[color]}`} />
       <div className={`${styles.dot} ${styles[color]}`} />
       <div className={`${styles.dot} ${styles[color]}`} />
     </div>
-  );
+  ), [color]);
 
-  const renderPulse = () => {
+  const renderPulse = React.useCallback(() => {
     const pulseClasses = [
       styles.spinner,
       styles[size],
@@ -67,9 +67,9 @@ export const Loading: React.FC<LoadingProps> = ({
       .join(' ');
 
     return <div className={pulseClasses} aria-label="Loading" />;
-  };
+  }, [size, color]);
 
-  const renderLoadingIndicator = () => {
+  const renderLoadingIndicator = React.useCallback(() => {
     switch (variant) {
       case 'dots':
         return renderDots();
@@ -79,7 +79,7 @@ export const Loading: React.FC<LoadingProps> = ({
       default:
         return renderSpinner();
     }
-  };
+  }, [variant, renderDots, renderPulse, renderSpinner]);
 
   return (
     <div className={containerClasses} role="status" aria-live="polite">
@@ -91,7 +91,7 @@ export const Loading: React.FC<LoadingProps> = ({
       )}
     </div>
   );
-};
+});
 
 // Skeleton component for content loading states
 export interface SkeletonProps {
@@ -101,24 +101,24 @@ export interface SkeletonProps {
   variant?: 'text' | 'rectangular' | 'circular';
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({
+export const Skeleton: React.FC<SkeletonProps> = React.memo(({
   width = '100%',
   height = '1rem',
   className = '',
   variant = 'text',
 }) => {
-  const skeletonStyles: React.CSSProperties = {
+  const skeletonStyles: React.CSSProperties = React.useMemo(() => ({
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
     borderRadius: variant === 'circular' ? '50%' : variant === 'text' ? '0.25rem' : '0.375rem',
-  };
+  }), [width, height, variant]);
 
-  const skeletonClasses = [
+  const skeletonClasses = React.useMemo(() => [
     styles.skeleton,
     className,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [className]);
 
   return (
     <div
@@ -127,7 +127,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       aria-label="Loading content"
     />
   );
-};
+});
 
 Loading.displayName = 'Loading';
 Skeleton.displayName = 'Skeleton';

@@ -12,11 +12,27 @@ const originalConsoleGroupEnd = console.groupEnd;
 // Mock DOM methods
 const mockAppendChild = vi.fn();
 const mockRemoveChild = vi.fn();
-const mockCreateElement = vi.fn(() => ({
-  style: {},
-  className: '',
-  textContent: '',
-}));
+const mockCreateElement = vi.fn(() => {
+  const element = {
+    style: {
+      cssText: '',
+    },
+    className: '',
+    textContent: '',
+    appendChild: vi.fn(),
+    remove: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  };
+  
+  // Make cssText writable
+  Object.defineProperty(element.style, 'cssText', {
+    writable: true,
+    value: '',
+  });
+  
+  return element;
+});
 
 beforeEach(() => {
   console.error = vi.fn();
@@ -242,7 +258,24 @@ describe('ErrorService', () => {
   describe('user-friendly messages', () => {
     it('provides user-friendly messages for API errors', () => {
       // Mock toast creation to capture message
-      const mockElement = { textContent: '' };
+      const mockElement = { 
+        textContent: '',
+        style: {
+          cssText: '',
+        },
+        className: '',
+        appendChild: vi.fn(),
+        remove: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      };
+      
+      // Make cssText writable
+      Object.defineProperty(mockElement.style, 'cssText', {
+        writable: true,
+        value: '',
+      });
+      
       mockCreateElement.mockReturnValue(mockElement);
 
       // Test 404 error
@@ -263,7 +296,24 @@ describe('ErrorService', () => {
     });
 
     it('provides user-friendly messages for network errors', () => {
-      const mockElement = { textContent: '' };
+      const mockElement = { 
+        textContent: '',
+        style: {
+          cssText: '',
+        },
+        className: '',
+        appendChild: vi.fn(),
+        remove: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      };
+      
+      // Make cssText writable
+      Object.defineProperty(mockElement.style, 'cssText', {
+        writable: true,
+        value: '',
+      });
+      
       mockCreateElement.mockReturnValue(mockElement);
 
       errorService.handleNetworkError(new Error('Network error'), { showToast: true });

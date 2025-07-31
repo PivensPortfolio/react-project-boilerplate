@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act } from '../utils/test-utils';
 import { useUser, useTheme, useLoading, useAuth } from '../../src/store/hooks';
 import { useAppStore } from '../../src/store/appStore';
 import type { User } from '../../src/store/types';

@@ -18,7 +18,7 @@ export interface ModalProps {
   overlayClassName?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = React.memo(({
   isOpen,
   onClose,
   title,
@@ -107,35 +107,35 @@ export const Modal: React.FC<ModalProps> = ({
     [onClose, closeOnOverlayClick]
   );
 
-  const modalClasses = [
+  const modalClasses = React.useMemo(() => [
     styles.modal,
     styles[size],
     className,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [size, className]);
 
-  const overlayClasses = [
+  const overlayClasses = React.useMemo(() => [
     styles.overlay,
     overlayClassName,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [overlayClassName]);
 
-  const bodyClasses = [
+  const bodyClasses = React.useMemo(() => [
     styles.body,
     noPadding && styles.noPadding,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [noPadding]);
 
-  const footerClasses = [
+  const footerClasses = React.useMemo(() => [
     styles.footer,
     footerAlignment === 'center' && styles.centered,
     footerAlignment === 'space-between' && styles.spaceBetween,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' '), [footerAlignment]);
 
   if (!isOpen) return null;
 
@@ -199,6 +199,4 @@ export const Modal: React.FC<ModalProps> = ({
   );
 
   return createPortal(modalContent, document.body);
-};
-
-Modal.displayName = 'Modal';
+});

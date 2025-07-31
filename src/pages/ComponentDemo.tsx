@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Button, Input, Modal, Loading, Skeleton, ThemeToggle } from '../components/ui';
 import { useBreakpoints } from '../hooks/useMediaQuery';
-import ErrorExample from '../components/examples/ErrorExample';
+import { lazyLoad } from '../utils/lazyLoad';
 import styles from './ComponentDemo.module.css';
 
-const ComponentDemo: React.FC = () => {
+// Lazy load heavy components
+const ErrorExample = lazyLoad(() => import('../components/examples/ErrorExample'));
+const ToastExample = lazyLoad(() => import('../components/examples/ToastExample').then(module => ({ default: module.ToastExample })));
+
+const ComponentDemo: React.FC = React.memo(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [inputError, setInputError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { isMobile, isTablet } = useBreakpoints();
 
-  const handleInputValidation = (_isValid: boolean, error?: string) => {
+  const handleInputValidation = React.useCallback((_isValid: boolean, error?: string) => {
     setInputError(error || '');
-  };
+  }, []);
 
-  const simulateLoading = () => {
+  const simulateLoading = React.useCallback(() => {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 3000);
-  };
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -232,10 +236,20 @@ const ComponentDemo: React.FC = () => {
         </div>
       </section>
 
+      {/* Toast Notifications Demo */}
+      <section className={styles.section}>
+        <h2>Toast Notifications</h2>
+        <Suspense fallback={<Loading text="Loading toast examples..." />}>
+          <ToastExample />
+        </Suspense>
+      </section>
+
       {/* Error Handling Demo */}
       <section className={styles.section}>
         <h2>Error Handling</h2>
-        <ErrorExample />
+        <Suspense fallback={<Loading text="Loading error examples..." />}>
+          <ErrorExample />
+        </Suspense>
       </section>
 
       {/* Responsive Demo */}
@@ -266,6 +280,6 @@ const ComponentDemo: React.FC = () => {
       </section>
     </div>
   );
-};
+});
 
 export default ComponentDemo;

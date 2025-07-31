@@ -1,0 +1,77 @@
+/* Login form styles */
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-md);
+  background-color: var(--color-background-secondary);
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--spacing-xl);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.loginHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.loginTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.loginSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.loginForm {
+  margin-bottom: var(--spacing-lg);
+}
+
+.formOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--spacing-md) 0;
+}
+
+.loginFooter {
+  text-align: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.signupPrompt {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: var(--spacing-sm);
+  }
+  
+  .loginCard {
+    padding: var(--spacing-lg);
+  }
+  
+  .formOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+}

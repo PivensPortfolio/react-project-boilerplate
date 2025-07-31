@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Input } from '@/components/ui/Input';
+import styles from '@/components/ui/Input.module.css';
 
 describe('Input', () => {
   it('renders with default props', () => {
@@ -9,36 +10,36 @@ describe('Input', () => {
     
     const input = screen.getByPlaceholderText('Enter text');
     expect(input).toBeInTheDocument();
-    expect(input).toHaveClass('input', 'medium');
+    expect(input).toHaveClass(styles.input, styles.medium);
   });
 
   it('renders with label', () => {
     render(<Input label="Username" placeholder="Enter username" />);
     
-    expect(screen.getByLabelText('Username')).toBeInTheDocument();
-    expect(screen.getByText('Username')).toHaveClass('label');
+    expect(screen.getByPlaceholderText('Enter username')).toBeInTheDocument();
+    expect(screen.getByText('Username')).toHaveClass(styles.label);
   });
 
   it('renders different sizes', () => {
     const { rerender } = render(<Input size="small" placeholder="Small" />);
-    expect(screen.getByPlaceholderText('Small')).toHaveClass('small');
+    expect(screen.getByPlaceholderText('Small')).toHaveClass(styles.small);
 
     rerender(<Input size="large" placeholder="Large" />);
-    expect(screen.getByPlaceholderText('Large')).toHaveClass('large');
+    expect(screen.getByPlaceholderText('Large')).toHaveClass(styles.large);
   });
 
   it('handles fullWidth prop', () => {
     render(<Input fullWidth placeholder="Full width" />);
     
-    const wrapper = screen.getByPlaceholderText('Full width').closest('.inputWrapper');
-    expect(wrapper).toHaveClass('fullWidth');
+    const wrapper = screen.getByPlaceholderText('Full width').closest(`.${styles.inputWrapper}`);
+    expect(wrapper).toHaveClass(styles.fullWidth);
   });
 
   it('displays error message', () => {
     render(<Input error="This field is required" placeholder="Input" />);
     
     const input = screen.getByPlaceholderText('Input');
-    expect(input).toHaveClass('error');
+    expect(input).toHaveClass(styles.error);
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(screen.getByRole('alert')).toHaveTextContent('This field is required');
   });
@@ -47,14 +48,14 @@ describe('Input', () => {
     render(<Input success="Valid input" placeholder="Input" />);
     
     const input = screen.getByPlaceholderText('Input');
-    expect(input).toHaveClass('success');
+    expect(input).toHaveClass(styles.success);
     expect(screen.getByText('Valid input')).toBeInTheDocument();
   });
 
   it('displays helper text', () => {
     render(<Input helperText="Enter your username" placeholder="Input" />);
     
-    expect(screen.getByText('Enter your username')).toHaveClass('helperText');
+    expect(screen.getByText('Enter your username')).toHaveClass(styles.helperText);
   });
 
   it('renders with icons', () => {
@@ -67,7 +68,7 @@ describe('Input', () => {
     );
     
     const input = screen.getByPlaceholderText('Input');
-    expect(input).toHaveClass('hasLeftIcon', 'hasRightIcon');
+    expect(input).toHaveClass(styles.hasLeftIcon, styles.hasRightIcon);
     expect(screen.getByTestId('left-icon')).toBeInTheDocument();
     expect(screen.getByTestId('right-icon')).toBeInTheDocument();
   });
@@ -215,7 +216,7 @@ describe('Input', () => {
   it('shows required indicator for required fields', () => {
     render(<Input label="Required Field" validation={{ required: true }} />);
     
-    expect(screen.getByText('Required Field')).toHaveClass('required');
+    expect(screen.getByText('Required Field')).toHaveClass(styles.required);
   });
 
   it('forwards ref correctly', () => {

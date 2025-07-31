@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Loading, Skeleton } from '@/components/ui/Loading';
+import styles from '@/components/ui/Loading.module.css';
 
 describe('Loading', () => {
   it('renders with default props', () => {
@@ -8,44 +9,44 @@ describe('Loading', () => {
     
     const loading = screen.getByRole('status');
     expect(loading).toBeInTheDocument();
-    expect(loading).toHaveClass('container');
+    expect(loading).toHaveClass(styles.container);
     
     const spinner = screen.getByLabelText('Loading');
-    expect(spinner).toHaveClass('spinner', 'medium', 'primary');
+    expect(spinner).toHaveClass(styles.spinner, styles.medium, styles.primary);
   });
 
   it('renders different sizes', () => {
     const { rerender } = render(<Loading size="small" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('small');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.small);
 
     rerender(<Loading size="large" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('large');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.large);
 
     rerender(<Loading size="xlarge" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('xlarge');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.xlarge);
   });
 
   it('renders different variants', () => {
     const { rerender } = render(<Loading variant="spinner" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('spinner');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.spinner);
 
     rerender(<Loading variant="dots" />);
     const dotsContainer = screen.getByLabelText('Loading');
-    expect(dotsContainer).toHaveClass('dots');
+    expect(dotsContainer).toHaveClass(styles.dots);
 
     rerender(<Loading variant="pulse" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('pulse');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.pulse);
   });
 
   it('renders different colors', () => {
     const { rerender } = render(<Loading color="secondary" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('secondary');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.secondary);
 
     rerender(<Loading color="white" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('white');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.white);
 
     rerender(<Loading color="dark" />);
-    expect(screen.getByLabelText('Loading')).toHaveClass('dark');
+    expect(screen.getByLabelText('Loading')).toHaveClass(styles.dark);
   });
 
   it('renders with text', () => {
@@ -53,20 +54,20 @@ describe('Loading', () => {
     
     const text = screen.getByText('Loading data...');
     expect(text).toBeInTheDocument();
-    expect(text).toHaveClass('text', 'medium');
+    expect(text).toHaveClass(styles.text, styles.medium);
     expect(text).toHaveAttribute('aria-label', 'Loading data...');
   });
 
   it('renders fullscreen', () => {
     render(<Loading fullscreen />);
     
-    expect(screen.getByRole('status')).toHaveClass('fullscreen');
+    expect(screen.getByRole('status')).toHaveClass(styles.fullscreen);
   });
 
   it('renders with overlay', () => {
     render(<Loading overlay />);
     
-    expect(screen.getByRole('status')).toHaveClass('overlay');
+    expect(screen.getByRole('status')).toHaveClass(styles.overlay);
   });
 
   it('applies custom className', () => {
@@ -89,10 +90,10 @@ describe('Loading', () => {
     render(<Loading variant="dots" />);
     
     const dotsContainer = screen.getByLabelText('Loading');
-    expect(dotsContainer).toHaveClass('dots');
+    expect(dotsContainer).toHaveClass(styles.dots);
     
     // Check that dots are rendered (they should be div elements with dot class)
-    const dots = dotsContainer.querySelectorAll('.dot');
+    const dots = dotsContainer.querySelectorAll(`.${styles.dot}`);
     expect(dots).toHaveLength(3);
   });
 });
@@ -103,7 +104,7 @@ describe('Skeleton', () => {
     
     const skeleton = screen.getByLabelText('Loading content');
     expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass('skeleton');
+    expect(skeleton).toHaveClass(styles.skeleton);
   });
 
   it('applies custom width and height', () => {

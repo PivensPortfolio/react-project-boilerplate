@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
+import { renderHook, waitFor, act } from '../utils/test-utils';
 import { useApi, useApiService, usePaginatedApi, useMutation } from '@/hooks/useApi';
 
 // Mock ApiUtils

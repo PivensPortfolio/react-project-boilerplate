@@ -11,7 +11,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   href?: string;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
+export const Button = React.memo(React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   (
     {
       variant = 'primary',
@@ -27,7 +27,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     },
     ref
   ) => {
-    const baseClasses = [
+    const baseClasses = React.useMemo(() => [
       styles.button,
       styles[variant],
       styles[size],
@@ -36,7 +36,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(' '), [variant, size, loading, fullWidth, className]);
 
     const isDisabled = disabled || loading;
 
@@ -67,6 +67,6 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       </button>
     );
   }
-);
+));
 
 Button.displayName = 'Button';

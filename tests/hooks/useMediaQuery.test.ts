@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act } from '../utils/test-utils';
 import { 
   useMediaQuery, 
   useBreakpoints, 
@@ -8,14 +8,23 @@ import {
   useDeviceCapabilities 
 } from '@/hooks/useMediaQuery';
 
-// Mock matchMedia
-const mockMatchMedia = vi.fn();
-
 beforeEach(() => {
   // Reset the mock before each test
-  mockMatchMedia.mockClear();
+  vi.clearAllMocks();
   
-  // Set up the default mock implementation
+  // Set up the default mock implementation for matchMedia
+  const mockMatchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+  
+  // Ensure window exists and set up matchMedia
   if (typeof window !== 'undefined') {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,

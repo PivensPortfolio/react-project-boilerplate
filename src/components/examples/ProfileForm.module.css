@@ -1,0 +1,128 @@
+/* Profile form styles */
+.profileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  background-color: var(--color-background-secondary);
+}
+
+.profileCard {
+  width: 100%;
+  max-width: 800px;
+  padding: var(--spacing-xl);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.profileHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.profileTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.profileSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.profileForm {
+  margin-bottom: var(--spacing-lg);
+}
+
+.formSection {
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-background-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.fieldRow {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+}
+
+.fieldRow > * {
+  flex: 1;
+}.form
+Actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-background-secondary);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  margin-top: var(--spacing-md);
+}
+
+.unsavedWarning {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-warning-light);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--border-radius);
+  color: var(--color-warning-dark);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-md);
+}
+
+.unsavedWarning span {
+  font-size: var(--font-size-lg);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profileContainer {
+    padding: var(--spacing-md);
+  }
+  
+  .profileCard {
+    padding: var(--spacing-lg);
+  }
+  
+  .fieldRow {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .formSection {
+    padding: var(--spacing-md);
+  }
+  
+  .formActions {
+    flex-direction: column;
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .profileContainer {
+    padding: var(--spacing-sm);
+  }
+  
+  .profileCard {
+    padding: var(--spacing-md);
+  }
+}

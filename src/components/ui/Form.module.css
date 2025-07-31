@@ -1,0 +1,107 @@
+/* Form component styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.formMessage {
+  margin: var(--spacing-sm) 0;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Form field groups */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.fieldRow {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+}
+
+.fieldRow > * {
+  flex: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .fieldRow {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+}
+
+/* Form sections */
+.formSection {
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-background-secondary);
+}
+
+.formSectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.formSectionDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Form validation summary */
+.validationSummary {
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-error);
+  border-radius: var(--border-radius);
+  background-color: var(--color-error-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.validationSummaryTitle {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-error);
+  margin-bottom: var(--spacing-sm);
+}
+
+.validationSummaryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.validationSummaryItem {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.validationSummaryItem:before {
+  content: '• ';
+  margin-right: var(--spacing-xs);
+}

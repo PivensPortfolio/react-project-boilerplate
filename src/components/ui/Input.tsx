@@ -22,7 +22,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   onValidation?: (isValid: boolean, error?: string) => void;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = React.memo(React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       label,
@@ -115,7 +115,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       [onBlur, validation, validateValue, onValidation]
     );
 
-    const inputClasses = [
+    const inputClasses = React.useMemo(() => [
       styles.input,
       styles[size],
       leftIcon && styles.hasLeftIcon,
@@ -125,14 +125,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(' '), [size, leftIcon, rightIcon, error, internalError, success, className]);
 
-    const wrapperClasses = [
+    const wrapperClasses = React.useMemo(() => [
       styles.inputWrapper,
       fullWidth && styles.fullWidth,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(' '), [fullWidth]);
 
     const displayError = error || internalError;
     const showSuccess = success && !displayError;
@@ -202,6 +202,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       </div>
     );
   }
-);
+));
 
 Input.displayName = 'Input';

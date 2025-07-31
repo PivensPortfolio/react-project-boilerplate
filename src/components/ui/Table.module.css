@@ -1,0 +1,294 @@
+/* Table Component Styles */
+.container {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-md, 0.5rem);
+  border: 1px solid var(--color-border, #e5e7eb);
+  background-color: var(--color-background, white);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+/* Size variants */
+.small {
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+.small th,
+.small td {
+  padding: var(--spacing-xs, 0.5rem) var(--spacing-sm, 0.75rem);
+}
+
+.medium th,
+.medium td {
+  padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
+}
+
+.large th,
+.large td {
+  padding: var(--spacing-md, 1rem) var(--spacing-lg, 1.5rem);
+}
+
+/* Header styles */
+.table thead {
+  background-color: var(--color-gray-50, #f9fafb);
+}
+
+.table th {
+  font-weight: var(--font-weight-semibold, 600);
+  text-align: left;
+  color: var(--color-gray-900, #111827);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  position: relative;
+}
+
+.sortableHeader {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--transition-fast, 0.2s ease-in-out);
+}
+
+.sortableHeader:hover {
+  background-color: var(--color-gray-100, #f3f4f6);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs, 0.5rem);
+}
+
+.sortIcon {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast, 0.2s ease-in-out);
+}
+
+.sortableHeader:hover .sortIcon {
+  opacity: 0.8;
+}
+
+.sortArrow {
+  width: 12px;
+  height: 6px;
+  transition: color var(--transition-fast, 0.2s ease-in-out);
+}
+
+.sortArrow.active {
+  color: var(--color-primary, #3b82f6);
+  opacity: 1;
+}
+
+/* Body styles */
+.table tbody tr {
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table td {
+  color: var(--color-gray-700, #374151);
+  vertical-align: top;
+}
+
+/* Variant styles */
+.bordered {
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.bordered th,
+.bordered td {
+  border-right: 1px solid var(--color-border, #e5e7eb);
+}
+
+.bordered th:last-child,
+.bordered td:last-child {
+  border-right: none;
+}
+
+.striped tbody tr:nth-child(even) {
+  background-color: var(--color-gray-25, #fafafa);
+}
+
+.hoverable tbody tr:hover {
+  background-color: var(--color-gray-50, #f9fafb);
+}
+
+.row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast, 0.2s ease-in-out);
+}
+
+/* Empty state */
+.emptyCell {
+  text-align: center;
+  color: var(--color-gray-500, #6b7280);
+  font-style: italic;
+  padding: var(--spacing-xl, 2rem) var(--spacing-md, 1rem);
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl, 2rem);
+  gap: var(--spacing-md, 1rem);
+  color: var(--color-gray-600, #4b5563);
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--color-gray-200, #e5e7eb);
+  border-top: 2px solid var(--color-primary, #3b82f6);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md, 1rem);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  background-color: var(--color-gray-50, #f9fafb);
+}
+
+.paginationInfo {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-gray-600, #4b5563);
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 1rem);
+}
+
+.paginationButton {
+  padding: var(--spacing-xs, 0.5rem) var(--spacing-sm, 0.75rem);
+  border: 1px solid var(--color-border, #e5e7eb);
+  background-color: var(--color-background, white);
+  color: var(--color-gray-700, #374151);
+  border-radius: var(--radius-sm, 0.25rem);
+  cursor: pointer;
+  font-size: var(--font-size-sm, 0.875rem);
+  transition: all var(--transition-fast, 0.2s ease-in-out);
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: var(--color-gray-50, #f9fafb);
+  border-color: var(--color-gray-300, #d1d5db);
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationCurrent {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-gray-700, #374151);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: var(--color-gray-800, #1f2937);
+    border-color: var(--color-gray-700, #374151);
+  }
+
+  .table thead {
+    background-color: var(--color-gray-900, #111827);
+  }
+
+  .table th {
+    color: var(--color-gray-100, #f3f4f6);
+    border-color: var(--color-gray-700, #374151);
+  }
+
+  .table td {
+    color: var(--color-gray-300, #d1d5db);
+  }
+
+  .table tbody tr {
+    border-color: var(--color-gray-700, #374151);
+  }
+
+  .sortableHeader:hover {
+    background-color: var(--color-gray-800, #1f2937);
+  }
+
+  .striped tbody tr:nth-child(even) {
+    background-color: var(--color-gray-900, #111827);
+  }
+
+  .hoverable tbody tr:hover {
+    background-color: var(--color-gray-700, #374151);
+  }
+
+  .pagination {
+    background-color: var(--color-gray-900, #111827);
+    border-color: var(--color-gray-700, #374151);
+  }
+
+  .paginationButton {
+    background-color: var(--color-gray-800, #1f2937);
+    border-color: var(--color-gray-700, #374151);
+    color: var(--color-gray-300, #d1d5db);
+  }
+
+  .paginationButton:hover:not(:disabled) {
+    background-color: var(--color-gray-700, #374151);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .pagination {
+    flex-direction: column;
+    gap: var(--spacing-sm, 0.75rem);
+    align-items: stretch;
+  }
+
+  .paginationControls {
+    justify-content: center;
+  }
+
+  .table {
+    font-size: var(--font-size-xs, 0.75rem);
+  }
+
+  .medium th,
+  .medium td {
+    padding: var(--spacing-xs, 0.5rem) var(--spacing-sm, 0.75rem);
+  }
+
+  .large th,
+  .large td {
+    padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
+  }
+}
